@@ -8,6 +8,9 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Register Blueprints
+from app.blueprints.teams import teams_bp
+
 
 # Import routes
 from app import routes
+

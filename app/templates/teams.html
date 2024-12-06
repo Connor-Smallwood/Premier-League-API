@@ -1,8 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}Teams{% endblock %}
+{% block title %}Tottenham Statistics{% endblock %}
 
 {% block content %}
-<h1>Teams</h1>
-<p>Welcome to the Teams page. Here you can manage all teams in the database.</p>
+<div class="container mt-5">
+    <h2>Tottenham Hotspur Statistics</h2>
+    {% if stats %}
+    <div class="card mb-4">
+        <img src="{{ stats.team_logo }}" class="card-img-top" alt="{{ stats.team_name }}" style="max-height: 200px; width: auto;">
+        <div class="card-body">
+            <h3 class="card-title">{{ stats.team_name }}</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Matches Played: {{ stats.matches_played }}</li>
+                <li class="list-group-item">Wins: {{ stats.wins }}</li>
+                <li class="list-group-item">Draws: {{ stats.draws }}</li>
+                <li class="list-group-item">Losses: {{ stats.losses }}</li>
+                <li class="list-group-item">Goals Scored: {{ stats.goals_scored }}</li>
+                <li class="list-group-item">Goals Conceded: {{ stats.goals_conceded }}</li>
+                <li class="list-group-item">xG (Expected Goals): {{ stats.xG }}</li>
+                <li class="list-group-item">Possession: {{ stats.possession }}%</li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <p>No data available for Tottenham Hotspur. Please update the data.</p>
+    <a href="{{ url_for('update_team') }}" class="btn btn-primary">Update Data</a>
+    {% endif %}
+</div>
 {% endblock %}

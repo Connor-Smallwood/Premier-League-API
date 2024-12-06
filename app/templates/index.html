@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
+{% block title %}Home{% endblock %}
+
 {% block content %}
-
-<h1>Spurs Tracker</h1>
-<br>
-<img src="{{ url_for('static', filename='assets/tyler.jpg') }}" alt="Greatest Team on Grass" width="300">
-
+<div class="container mt-5">
+    <h1>Welcome to Spurs Tracker</h1>
+    <p>Use the navigation bar to view or update Tottenham Hotspur's statistics.</p>
+</div>
 {% endblock %}
