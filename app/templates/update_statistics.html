@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Update Statistics - Spurs Tracker{% endblock %}
+
+{% block content %}
+<h1>Update Team Statistics</h1>
+<p>Select a season to update Tottenham Hotspur's statistics:</p>
+
+<form id="update-form" method="POST" action="/update_statistics">
+    <label for="season">Season:</label>
+    <select id="season" name="season" class="form-control mb-3">
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+        <option value="2019">2019</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<!-- Display update status -->
+<div id="status" class="mt-3"></div>
+
+<script>
+    const form = document.getElementById('update-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const season = document.getElementById('season').value;
+
+        fetch('/update_statistics', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                team_id: 47,  // Tottenham
+                league_id: 39,  // Premier League
+                season: season,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="alert alert-success">${data.success || data.error}</div>`;
+        })
+        .catch(error => {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        });
+    });
+</script>
+{% endblock %}

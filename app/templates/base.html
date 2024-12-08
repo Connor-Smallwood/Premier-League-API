@@ -18,21 +18,22 @@
                 <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'teams' %}active{% endif %}" href="{{ url_for('teams') }}">Tottenham Statistics</a>
+                <a class="nav-link {% if request.endpoint == 'history' %}active{% endif %}" href="{{ url_for('history') }}">History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'statistics' %}active{% endif %}" href="{{ url_for('statistics') }}">Statistics</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'players' %}active{% endif %}" href="{{ url_for('players') }}">Players</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'matches' %}active{% endif %}" href="{{ url_for('matches') }}">Matches</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'premier_league_table' %}active{% endif %}" href="{{ url_for('premier_league_table') }}">Premier League Table</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'history' %}active{% endif %}" href="{{ url_for('history') }}">History</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'insights' %}active{% endif %}" href="{{ url_for('insights') }}">Insights</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'leagues' %}active{% endif %}" href="{{ url_for('leagues') }}">Leagues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'update_statistics' %}active{% endif %}" href="{{ url_for('update_statistics') }}">Update Statistics</a>
             </li>
         </ul>
     </div>
