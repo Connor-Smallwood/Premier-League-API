@@ -1,61 +1,19 @@
-CREATE TABLE `matches` (
-  `match_id` int NOT NULL AUTO_INCREMENT,
-  `home_team_id` int NOT NULL,
-  `away_team_id` int NOT NULL,
-  `home_goals` int DEFAULT '0',
-  `away_goals` int DEFAULT '0',
-  `match_date` date NOT NULL,
-  PRIMARY KEY (`match_id`),
-  KEY `home_team_id` (`home_team_id`),
-  KEY `away_team_id` (`away_team_id`),
-  CONSTRAINT `matches_ibfk_1` FOREIGN KEY (`home_team_id`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `matches_ibfk_2` FOREIGN KEY (`away_team_id`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 CREATE TABLE `players` (
-  `player_id` int NOT NULL AUTO_INCREMENT,
-  `team_id` int NOT NULL,
-  `player_name` varchar(255) NOT NULL,
+  `player_id` int NOT NULL,
+  `name` varchar(255) NOT NULL,
   `position` varchar(50) DEFAULT NULL,
-  `goals` int DEFAULT '0',
-  `assists` int DEFAULT '0',
-  `xG` decimal(5,2) DEFAULT '0.00',
-  `appearances` int DEFAULT '0',
-  `minutes_played` int DEFAULT '0',
+  `team_id` int DEFAULT NULL,
+  `number` int DEFAULT NULL,
   PRIMARY KEY (`player_id`),
   KEY `team_id` (`team_id`),
-  CONSTRAINT `players_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `premier_league_table` (
-  `ranking` int NOT NULL AUTO_INCREMENT,
-  `team_id` int NOT NULL,
-  `matches_played` int DEFAULT '0',
-  `wins` int DEFAULT '0',
-  `draws` int DEFAULT '0',
-  `losses` int DEFAULT '0',
-  `goals_scored` int DEFAULT '0',
-  `goals_conceded` int DEFAULT '0',
-  `goal_difference` int GENERATED ALWAYS AS ((`goals_scored` - `goals_conceded`)) STORED,
-  `points` int DEFAULT '0',
-  PRIMARY KEY (`ranking`),
-  KEY `team_id` (`team_id`),
-  CONSTRAINT `premier_league_table_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `team_id` FOREIGN KEY (`team_id`) REFERENCES `teams` (`team_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `teams` (
-  `team_id` int NOT NULL AUTO_INCREMENT,
-  `team_name` varchar(255) NOT NULL,
-  `matches_played` int DEFAULT '0',
-  `wins` int DEFAULT '0',
-  `draws` int DEFAULT '0',
-  `losses` int DEFAULT '0',
-  `goals_scored` int DEFAULT '0',
-  `goals_conceded` int DEFAULT '0',
-  `goal_difference` int GENERATED ALWAYS AS ((`goals_scored` - `goals_conceded`)) STORED,
-  `points` int DEFAULT '0',
-  `xG` decimal(5,2) DEFAULT '0.00',
-  `possession` decimal(5,2) DEFAULT '0.00',
-  PRIMARY KEY (`team_id`),
-  UNIQUE KEY `team_name` (`team_name`)
+  `team_id` int NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
