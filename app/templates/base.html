@@ -5,10 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Spurs Tracker{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Tottenham Hotspur Colors */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; /* White background */
+            color: #132257; /* Dark blue text */
+        }
+
+        .navbar {
+            background-color: #132257; /* Dark blue */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #ffffff !important; /* White text */
+        }
+
+        .nav-link:hover {
+            color: #004188 !important; /* Bright blue */
+        }
+
+        .navbar-logo {
+            width: 100px;
+            height: auto;
+            margin-right: 5px; /* Space between logo and brand name */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #132257; /* Dark blue */
+            color: #ffffff; /* White text */
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .container {
+            margin-top: 60px; /* Space for navbar */
+            margin-bottom: 60px; /* Space for footer */
+        }
+
+        h1 {
+            color: #004188; /* Bright blue */
+            text-align: center;
+        }
+
+        .team-image-placeholder {
+            font-style: italic;
+            color: #999;
+            text-align: center;
+            margin: 20px auto;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Spurs Tracker</a>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+        <!-- Insert Tottenham logo here -->
+        <img src="/static/assets/Tottenham-Hotspur-Logo.png" alt="Tottenham Logo" class="navbar-logo">
+        Spurs Tracker
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,9 +92,6 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.endpoint == 'leagues' %}active{% endif %}" href="{{ url_for('leagues') }}">Leagues</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'update_statistics' %}active{% endif %}" href="{{ url_for('update_statistics') }}">Update Statistics</a>
-            </li>
         </ul>
     </div>
 </nav>
@@ -56,6 +113,10 @@
     <!-- Page content -->
     {% block content %}{% endblock %}
 </div>
+
+<footer>
+    <p>&copy; {{ current_year }} Spurs Tracker. All rights reserved.</p>
+</footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

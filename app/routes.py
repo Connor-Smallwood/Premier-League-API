@@ -1,46 +1,27 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import Flask, render_template
 from app import app
-from app.db_connect import get_db
+from app.db_connect import connect_to_database
 
-@app.route('/leagues/edit/<int:league_id>', methods=['GET', 'POST'])
-def edit_league(league_id):
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-    if request.method == 'POST':
-        # Handle form submission to update league
-        name = request.form['name']
-        country = request.form['country']
-        season = int(request.form['season'])
-        start = request.form['start']
-        end = request.form['end']
-        logo = request.form['logo']
+@app.route('/history')
+def history():
+    return render_template('history.html')
 
-        query = """
-        UPDATE leagues
-        SET name = %s, country = %s, season = %s, start = %s, end = %s, logo = %s
-        WHERE league_id = %s
-        """
-        cursor.execute(query, (name, country, season, start, end, logo, league_id))
-        db.commit()
-        flash('League updated successfully!', 'success')
-        return redirect(url_for('leagues'))
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
 
-    # Fetch league data for the form
-    cursor.execute("SELECT * FROM leagues WHERE league_id = %s", (league_id,))
-    league = cursor.fetchone()
+@app.route('/players')
+def players():
+    return render_template('players.html')
 
-    return render_template('edit_league.html', league=league)
+@app.route('/insights')
+def insights():
+    return render_template('insights.html')
 
-
-@app.route('/leagues/delete/<int:league_id>', methods=['POST'])
-def delete_league(league_id):
-    db = get_db()
-    cursor = db.cursor()
-
-    query = "DELETE FROM leagues WHERE league_id = %s"
-    cursor.execute(query, (league_id,))
-    db.commit()
-
-    flash('League deleted successfully!', 'danger')
-    return redirect(url_for('leagues'))
+@app.route('/leagues', methods=['GET'])
+def leagues():
+    return render_template('leagues.html')
