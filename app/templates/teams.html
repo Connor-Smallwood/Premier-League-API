@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Teams - Spurs Tracker{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Teams</h1>
+
+    <!-- Button to update players for all teams -->
+    <form method="post" action="{{ url_for('update_players_all') }}" class="mb-3">
+        <button type="submit" class="btn btn-info">Update Players for All Teams</button>
+    </form>
+
+    <!-- Button to add a new team -->
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addTeamModal">
+        Add New Team
+    </button>
+
+    <!-- Table displaying all teams -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>
+                    <a href="{{ url_for('teams', sort_by='name', order='asc') }}">Team Name &#x25B2;</a>
+                    <a href="{{ url_for('teams', sort_by='name', order='desc') }}">&#x25BC;</a>
+                </th>
+                <th>
+                    <a href="{{ url_for('teams', sort_by='city', order='asc') }}">City &#x25B2;</a>
+                    <a href="{{ url_for('teams', sort_by='city', order='desc') }}">&#x25BC;</a>
+                </th>
+                <th>Address</th>
+                <th>Logo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <td>{{ team[1] }}</td>
+                <td>{{ team[3] }}</td>
+                <td>{{ team[2] }}</td>
+                <td><img src="{{ team[4] }}" alt="Logo" style="height: 50px;"></td>
+                <td>
+                    <!-- Update Players Button -->
+                    <form method="post" action="{{ url_for('update_players_for_team', team_id=team[0]) }}" class="d-inline">
+                        <button type="submit" class="btn btn-info btn-sm">Update Players</button>
+                    </form>
+
+                    <!-- Edit Button -->
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editTeamModal{{ team[0] }}">
+                        Edit
+                    </button>
+
+                    <!-- Delete Button -->
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTeamModal{{ team[0] }}">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+
+            <!-- Edit Team Modal -->
+            <div class="modal fade" id="editTeamModal{{ team[0] }}" tabindex="-1" role="dialog" aria-labelledby="editTeamModalLabel{{ team[0] }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form method="post" action="{{ url_for('edit_team', team_id=team[0]) }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editTeamModalLabel{{ team[0] }}">Edit Team</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name{{ team[0] }}">Team Name</label>
+                                    <input type="text" class="form-control" name="name" id="name{{ team[0] }}" value="{{ team[1] }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address{{ team[0] }}">Address</label>
+                                    <input type="text" class="form-control" name="address" id="address{{ team[0] }}" value="{{ team[2] }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city{{ team[0] }}">City</label>
+                                    <input type="text" class="form-control" name="city" id="city{{ team[0] }}" value="{{ team[3] }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="logo{{ team[0] }}">Logo URL</label>
+                                    <input type="text" class="form-control" name="logo" id="logo{{ team[0] }}" value="{{ team[4] }}">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-warning">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Team Modal -->
+            <div class="modal fade" id="deleteTeamModal{{ team[0] }}" tabindex="-1" role="dialog" aria-labelledby="deleteTeamModalLabel{{ team[0] }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form method="post" action="{{ url_for('delete_team', team_id=team[0]) }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteTeamModalLabel{{ team[0] }}">Delete Team</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the team "<strong>{{ team[1] }}</strong>"?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Team Modal -->
+<div class="modal fade" id="addTeamModal" tabindex="-1" role="dialog" aria-labelledby="addTeamModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="{{ url_for('add_team') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTeamModalLabel">Add New Team</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Team Name</label>
+                        <input type="text" class="form-control" name="name" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" name="address" id="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" class="form-control" name="city" id="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="logo">Logo URL</label>
+                        <input type="text" class="form-control" name="logo" id="logo">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,9 +3,151 @@
 {% block title %}Players - Spurs Tracker{% endblock %}
 
 {% block content %}
-<h1>Player Information</h1>
-<p>Get detailed information about each Tottenham player, including their stats and performance.</p>
-<div class="team-image">
-    <p class="team-image-placeholder">[Team image will go here]</p>
+<div class="container mt-4">
+    <h1>Players</h1>
+
+    <!-- Grouped players by team -->
+    {% for team_name, players in grouped_players.items() %}
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>{{ team_name }}</h3>
+            <a class="toggle-arrow" data-toggle="collapse" href="#collapse{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+        <div id="collapse{{ loop.index }}" class="collapse">
+            <div class="card-body">
+                {% if players %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th>Position</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in players %}
+                        <tr>
+                            <td>{{ player.player_name }}</td>
+                            <td>{{ player.number }}</td>
+                            <td>{{ player.position }}</td>
+                            <td>
+                                <!-- Edit Button -->
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editPlayerModal{{ player.player_id }}">
+                                    Edit
+                                </button>
+                                <!-- Delete Button -->
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePlayerModal{{ player.player_id }}">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Edit Player Modal -->
+                        <div class="modal fade" id="editPlayerModal{{ player.player_id }}" tabindex="-1" role="dialog" aria-labelledby="editPlayerModalLabel{{ player.player_id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form method="post" action="{{ url_for('edit_player', player_id=player.player_id) }}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editPlayerModalLabel{{ player.player_id }}">Edit Player</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="name{{ player.player_id }}">Name</label>
+                                                <input type="text" class="form-control" name="name" id="name{{ player.player_id }}" value="{{ player.player_name }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="number{{ player.player_id }}">Number</label>
+                                                <input type="text" class="form-control" name="number" id="number{{ player.player_id }}" value="{{ player.number }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="position{{ player.player_id }}">Position</label>
+                                                <input type="text" class="form-control" name="position" id="position{{ player.player_id }}" value="{{ player.position }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-warning">Save Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Player Modal -->
+                        <div class="modal fade" id="deletePlayerModal{{ player.player_id }}" tabindex="-1" role="dialog" aria-labelledby="deletePlayerModalLabel{{ player.player_id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form method="post" action="{{ url_for('delete_player', player_id=player.player_id) }}">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deletePlayerModalLabel{{ player.player_id }}">Delete Player</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete the player "<strong>{{ player.player_name }}</strong>"?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No players found for this team.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Add Player Modal -->
+<div class="modal fade" id="addPlayerModal" tabindex="-1" role="dialog" aria-labelledby="addPlayerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="{{ url_for('add_player') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPlayerModalLabel">Add New Player</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="number">Number</label>
+                        <input type="number" class="form-control" name="number" id="number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" name="position" id="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="team_id">Team ID</label>
+                        <input type="number" class="form-control" name="team_id" id="team_id" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Player</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

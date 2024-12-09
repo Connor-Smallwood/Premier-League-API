@@ -21,3 +21,4 @@ def connect_to_database():
     except Error as e:
         print(f"Database connection error: {e}")
         return None
+
