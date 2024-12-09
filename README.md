@@ -1,0 +1,6 @@
+The noval feature: 
+This website uses an API to get the data from the server and display it on the website. The data is then automatically inputted into the databases. There is also a updates players button on the teams page that allows the user to refresh the data. This ensures that data is always up to date even when a new team is added. 
+
+I chose this feature since the api provides freedom to the user to update the data whenever they want. This is a great feature since the user can always have the most up to date information. It also simplified the process of updating the data since the user does not have to manually input the data.
+
+As said before, the teams page has an update player that acts as a refresh button in the case of new teams being added. The players on the players page are also grouped by their respective teams. They are accessed by a dropdown arrow next to each team. This gives the page a better user experience, making it quick and easy to find the player you are looking for.
